@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    server: mc
+  name: mc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      server: mc
+  template:
+    metadata:
+      labels:
+        server: mc
+    spec:
+      containers:
+        - name: mc
+          env:
+            - name: EULA
+              value: "TRUE"
+            - name: MOTD
+              value: Latest Release
+            - name: MODE
+              value: survival
+            - name: PVP
+              value: "false"
+            - name: MAX_MEMORY
+              value: "1G"
+          image: itzg/minecraft-server
+          imagePullPolicy: Always
+          stdin: true
+          tty: true
+          volumeMounts:
+            - mountPath: /data
+              name: mc
+      restartPolicy: Always
+      volumes:
+        - name: mc
+          persistentVolumeClaim:
+            claimName: mc
