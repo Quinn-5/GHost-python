@@ -3,41 +3,45 @@ import yaml
 from os import path
 from kubernetes import client, config
 
-def create_pv(file: io.TextIOWrapper):
+def open_yaml(filepath: str, filename: str):
+    with open(path.join(filepath, filename)) as f:
+        return yaml.safe_load(f)
+
+def create_pv(filepath: str):
     v1 = client.CoreV1Api()
-    vol = yaml.safe_load(file)
+    volume = open_yaml(filepath, "volume.yaml")
     try:
-        resp = v1.create_persistent_volume(vol)
+        resp = v1.create_persistent_volume(volume)
     except client.rest.ApiException as e:
         print(f"Error creating PersistentVolume:\n{e}")
         return
     print(f"PersistentVolume {resp.metadata.name} created.")
     
-def create_volume_claim(file: io.TextIOWrapper, namespace="default"):
+def create_volume_claim(filepath: str, namespace="default"):
     v1 = client.CoreV1Api()
-    pvc = yaml.safe_load(file)
+    volume_claim = open_yaml(filepath, "volume-claim.yaml")
     try:
-        resp = v1.create_namespaced_persistent_volume_claim(namespace, pvc)
+        resp = v1.create_namespaced_persistent_volume_claim(namespace, volume_claim)
     except client.rest.ApiException as e:
         print(f"Error creating PersistentVolumeClaim:\n{e}")
         return
     print(f"PersistentVolumeClaim created. status={resp.metadata.name}")
 
-def create_deployment(file: io.TextIOWrapper, namespace="default"):
+def create_deployment(filepath: str, namespace="default"):
     v1 = client.AppsV1Api()
-    dep = yaml.safe_load(file)
+    deployment = open_yaml(filepath, "deployment.yaml")
     try:
-        resp = v1.create_namespaced_deployment(namespace, dep)
+        resp = v1.create_namespaced_deployment(namespace, deployment)
     except client.rest.ApiException as e:
         print(f"Error creating Deployment:\n{e}")
         return
     print(f"Deployment created. status={resp.metadata.name}")
 
-def create_nodeport(file: io.TextIOWrapper, namespace="default"):
+def create_nodeport(filepath: str, namespace="default"):
     v1 = client.CoreV1Api()
-    NodePort = yaml.safe_load(file)
+    node_port = open_yaml(filepath, "nodeport.yaml")
     try:
-        resp = v1.create_namespaced_service(namespace, NodePort)
+        resp = v1.create_namespaced_service(namespace, node_port)
     except client.rest.ApiException as e:
         print(f"Error creating NodePort:\n{e}")
         return
@@ -45,16 +49,12 @@ def create_nodeport(file: io.TextIOWrapper, namespace="default"):
 
 def main():
     config.load_kube_config()
-    manifestDir = path.join(path.dirname(__file__), "manifests/minecraft/")
+    manifests = path.join(path.dirname(__file__), "manifests/minecraft/")
 
-    with open(path.join(manifestDir, "volume.yaml")) as file:
-        create_pv(file)
-    with open(path.join(manifestDir, "volume-claim.yaml")) as file:
-        create_volume_claim(file)
-    with open(path.join(manifestDir, "deployment.yaml")) as file:
-        create_deployment(file)
-    with open(path.join(manifestDir, "nodeport.yaml")) as file:
-        create_nodeport(file)
+    create_pv(manifests)
+    create_volume_claim(manifests)
+    create_deployment(manifests)
+    create_nodeport(manifests)
 
 if __name__ == '__main__':
     main()
