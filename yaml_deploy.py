@@ -16,7 +16,7 @@ def create_pv(filepath: str):
         print(f"Error creating PersistentVolume:\n{e}")
         return
     print(f"PersistentVolume {resp.metadata.name} created.")
-    
+
 def create_volume_claim(filepath: str, namespace="default"):
     v1 = client.CoreV1Api()
     volume_claim = open_yaml(filepath, "volume-claim.yaml")
@@ -25,7 +25,7 @@ def create_volume_claim(filepath: str, namespace="default"):
     except client.rest.ApiException as e:
         print(f"Error creating PersistentVolumeClaim:\n{e}")
         return
-    print(f"PersistentVolumeClaim created. status={resp.metadata.name}")
+    print(f"PersistentVolumeClaim {resp.metadata.name} created.")
 
 def create_deployment(filepath: str, namespace="default"):
     v1 = client.AppsV1Api()
@@ -35,7 +35,7 @@ def create_deployment(filepath: str, namespace="default"):
     except client.rest.ApiException as e:
         print(f"Error creating Deployment:\n{e}")
         return
-    print(f"Deployment created. status={resp.metadata.name}")
+    print(f"Deployment {resp.metadata.name} created.")
 
 def create_nodeport(filepath: str, namespace="default"):
     v1 = client.CoreV1Api()
@@ -45,7 +45,7 @@ def create_nodeport(filepath: str, namespace="default"):
     except client.rest.ApiException as e:
         print(f"Error creating NodePort:\n{e}")
         return
-    print(f"NodePort created. status={resp.metadata.name}")
+    print(f"NodePort {resp.metadata.name} created.")
 
 def main():
     config.load_kube_config()
