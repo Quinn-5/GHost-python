@@ -1,3 +1,7 @@
+# Just realized this entire module could be replaced
+# by kubernetes.utils.create_from_yaml...
+# Keeping it here for now anyway
+
 import io
 import yaml
 from os import path

@@ -33,7 +33,7 @@ def delete_nodeport(name, namespace):
     try:
         resp = api.delete_namespaced_service(name, namespace)
     except client.rest.ApiException as e:
-        print(f"NodePort creation failed:\n{e}")
+        print(f"NodePort deletion failed:\n{e}")
         return
     print(f"NodePort {name} successfully deleted.")
     return resp
