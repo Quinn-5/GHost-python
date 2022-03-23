@@ -3,13 +3,13 @@ from kubernetes import client, config
 def launch_deployment(deployment: client.V1Deployment, namespace="default"):
     api = client.AppsV1Api()
 
-    print(f"Creating Deployment {name}.")
+    print(f"Creating Deployment {deployment.metadata.name}.")
     try:
         resp = api.create_namespaced_deployment(namespace, deployment)
     except client.rest.ApiException as e:
         print(f"Deployment creation failed:\n{e}")
         return
-    print(f"Deployment {name} successfully created.")
+    print(f"Deployment {deployment.metadata.name} successfully created.")
     return resp
 
 def delete_deployment(name: str, namespace="default"):
