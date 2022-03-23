@@ -67,16 +67,28 @@ def create_deployment(name:str):
 
     return deployment
 
+def deploy(name:str, namespace:str):
+    deployment = create_deployment(name)
+    resources.create_volume(name, namespace, "500Mi")
+    resources.create_claim(name, namespace, "500Mi")
+    resources.create_nodeport(25565, name, namespace)
+    resources.launch_deployment(deployment, namespace)
+
+def delete(name:str, namespace:str):
+    resources.delete_nodeport(name, namespace)
+    resources.delete_claim(name, namespace)
+    resources.delete_volume(name)
+    resources.delete_deployment(name, namespace)
+
 def main():
     config.load_kube_config()
 
     name = "minecraft"
+    namespace = "dev"
 
-    deployment = create_deployment(name)
-
-    resources.launch_deployment(deployment, "dev")
-    input()
-    resources.delete_deployment(name, "dev")
+    deploy(name, namespace)
+    input("Press Enter to continue...")
+    delete(name, namespace)
 
 if __name__ == "__main__":
     main()
