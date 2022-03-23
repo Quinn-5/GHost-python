@@ -1,13 +1,12 @@
 from kubernetes import client, config
 
-def create_claim(volume, size:str, namespace="default"):
+def create_claim(name:str, namespace:str, size:str):
     api = client.CoreV1Api()
-    name = volume
 
     spec = client.V1PersistentVolumeClaimSpec(
         access_modes=["ReadWriteOnce"],
         resources=client.V1ResourceRequirements(requests={"storage":size}),
-        volume_name=volume
+        volume_name=name
     )
 
     body = client.V1PersistentVolumeClaim(
@@ -17,7 +16,7 @@ def create_claim(volume, size:str, namespace="default"):
         spec=spec
     )
 
-    print(f"Creating PersistentVolumeClaim {name}.")
+    print(f"Creating PersistentVolumeClaim {name} in namespace {namespace}.")
     try:
         resp = api.create_namespaced_persistent_volume_claim(namespace, body)
     except client.rest.ApiException as e:
@@ -26,10 +25,10 @@ def create_claim(volume, size:str, namespace="default"):
     print(f"PersistentVolumeClaim {name} successfully created.")
     return resp
 
-def delete_claim(name, namespace="default"):
+def delete_claim(name:str, namespace:str):
     api = client.CoreV1Api()
 
-    print(f"Deleting PersistentVolumeClaim {name}.")
+    print(f"Deleting PersistentVolumeClaim {name} from namespace {namespace}.")
     try:
         resp = api.delete_namespaced_persistent_volume_claim(name, namespace)
     except client.rest.ApiException as e:
@@ -41,7 +40,7 @@ def delete_claim(name, namespace="default"):
 def main():
     config.load_kube_config()
 
-    create_claim("test", "500Mi", "dev")
+    create_claim("test", "dev", "500Mi")
     input("Press Enter to continue...")
     delete_claim("test", "dev")
 

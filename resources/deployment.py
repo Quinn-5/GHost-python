@@ -1,9 +1,9 @@
 from kubernetes import client, config
 
-def launch_deployment(deployment: client.V1Deployment, namespace="default"):
+def launch_deployment(deployment:client.V1Deployment, namespace):
     api = client.AppsV1Api()
 
-    print(f"Creating Deployment {deployment.metadata.name}.")
+    print(f"Creating Deployment {deployment.metadata.name} in namespace {namespace}")
     try:
         resp = api.create_namespaced_deployment(namespace, deployment)
     except client.rest.ApiException as e:
@@ -12,10 +12,10 @@ def launch_deployment(deployment: client.V1Deployment, namespace="default"):
     print(f"Deployment {deployment.metadata.name} successfully created.")
     return resp
 
-def delete_deployment(name: str, namespace="default"):
+def delete_deployment(name:str, namespace):
     api = client.AppsV1Api()
 
-    print(f"Deleting Deployment {name}.")
+    print(f"Deleting Deployment {name} from namespace {namespace}.")
     try:
         resp = api.delete_namespaced_deployment(name, namespace)
     except client.rest.ApiException as e:
@@ -23,13 +23,3 @@ def delete_deployment(name: str, namespace="default"):
         return
     print(f"Deployment {name} successfully deleted.")
     return resp
-
-def main():
-    config.load_kube_config()
-
-    launch_deployment(deployment)
-    input("Press Enter to continue: ")
-    delete_deployment(name)
-
-if __name__ == "__main__":
-    main()

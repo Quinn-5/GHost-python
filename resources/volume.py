@@ -1,6 +1,6 @@
 from kubernetes import client, config
 
-def create_volume(size: str, name, namespace="default"):
+def create_volume(name:str, namespace:str, size:str):
     api = client.CoreV1Api()
 
     spec = client.V1PersistentVolumeSpec(
@@ -58,7 +58,7 @@ def delete_volume(name: str):
 def main():
     config.load_kube_config()
 
-    create_volume("500Mi", "test", "dev")
+    create_volume("test", "dev", "500Mi")
     input("Press Enter to continue...")
     delete_volume("test")
 

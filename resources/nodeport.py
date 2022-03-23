@@ -1,6 +1,14 @@
 from kubernetes import client, config
 
 def create_nodeport(port: int, selector: str, namespace="default"):
+    """Creates a noteport 
+
+    Parameters:
+    port (int): port of the internal service
+    selector (str): service to attach to
+    namespace: 
+
+    """
     api = client.CoreV1Api()
     name = selector
 
@@ -43,7 +51,7 @@ def main():
     config.load_kube_config()
 
     create_nodeport(25565, "test", "dev")
-    input("Press Enter to continue: ")
+    input("Press Enter to continue...")
     delete_nodeport("test", "dev")
 
 if __name__ == "__main__":
