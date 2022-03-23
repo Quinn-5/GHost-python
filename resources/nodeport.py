@@ -1,6 +1,6 @@
 from kubernetes import client, config
 
-def create_nodeport(port: int, selector: str, namespace="default"):
+def create_nodeport(port:int, selector:str, namespace:str):
     """Creates a noteport 
 
     Parameters:
@@ -34,7 +34,7 @@ def create_nodeport(port: int, selector: str, namespace="default"):
     print(f"NodePort {name} successfully created.")
     return resp
 
-def delete_nodeport(name, namespace):
+def delete_nodeport(name:str, namespace:str):
     api = client.CoreV1Api()
     
     print(f"Deleting NodePort {name} from namespace {namespace}.")

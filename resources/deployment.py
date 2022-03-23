@@ -1,6 +1,6 @@
 from kubernetes import client, config
 
-def launch_deployment(deployment:client.V1Deployment, namespace):
+def launch_deployment(deployment:client.V1Deployment, namespace:str):
     api = client.AppsV1Api()
 
     print(f"Creating Deployment {deployment.metadata.name} in namespace {namespace}")
@@ -12,7 +12,7 @@ def launch_deployment(deployment:client.V1Deployment, namespace):
     print(f"Deployment {deployment.metadata.name} successfully created.")
     return resp
 
-def delete_deployment(name:str, namespace):
+def delete_deployment(name:str, namespace:str):
     api = client.AppsV1Api()
 
     print(f"Deleting Deployment {name} from namespace {namespace}.")

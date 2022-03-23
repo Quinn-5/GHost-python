@@ -43,7 +43,7 @@ def create_volume(name:str, namespace:str, size:str):
     print(f"PersistentVolume {name} successfully created.")
     return resp
 
-def delete_volume(name: str):
+def delete_volume(name:str):
     api = client.CoreV1Api()
 
     print(f"Deleting PersistentVolume {name}.")
