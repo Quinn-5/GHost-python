@@ -73,9 +73,14 @@ def deploy(name:str, namespace:str):
     resources.create_volume(name, namespace, "500Mi")
     resources.create_claim(name, namespace, "500Mi")
     np = resources.create_nodeport(25565, name, namespace)
-    port = np.spec.ports[0].node_port
     resources.launch_deployment(deployment, namespace)
-    print(f"Your new server can be accessed at amadeus.csh.rit.edu:{port}")
+    try:
+        port = np.spec.ports[0].node_port
+        print(f"Your new server can be accessed at amadeus.csh.rit.edu:{port}")
+        return port
+    except AttributeError:
+        pass
+
 
 def delete(name:str, namespace:str):
     resources.delete_deployment(name, namespace)
