@@ -1,11 +1,12 @@
 from kubernetes import client, config
 
-def create_claim(name:str, namespace:str, size:str):
+def create_claim(name:str, namespace:str, size:str, storage_class=None):
     api = client.CoreV1Api()
 
     spec = client.V1PersistentVolumeClaimSpec(
         access_modes=["ReadWriteOnce"],
         resources=client.V1ResourceRequirements(requests={"storage":size}),
+        storage_class_name=storage_class,
         volume_name=name
     )
 

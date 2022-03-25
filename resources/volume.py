@@ -1,6 +1,6 @@
 from kubernetes import client, config
 
-def create_volume(name:str, namespace:str, size:str):
+def create_volume(name:str, namespace:str, size:str, storage_class=None):
     api = client.CoreV1Api()
 
     spec = client.V1PersistentVolumeSpec(
@@ -24,7 +24,8 @@ def create_volume(name:str, namespace:str, size:str):
                     )
                 ]
             )
-        )
+        ),
+        storage_class_name=storage_class
     )
 
     body = client.V1PersistentVolume(
