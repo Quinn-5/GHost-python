@@ -58,7 +58,7 @@ def deploy(name:str, namespace:str):
     resources.launch_deployment(deployment, namespace)
     try:
         port = np.spec.ports[0].node_port
-        print(f"Your new server can be accessed at amadeus.csh.rit.edu:{port}")
+        print(f"Server created. Accessible at amadeus.csh.rit.edu:{port}")
         return port
     except AttributeError:
         pass
