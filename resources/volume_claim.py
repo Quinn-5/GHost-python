@@ -21,9 +21,12 @@ def create_claim(name:str, namespace:str, size:str, storage_class=None):
     try:
         resp = api.create_namespaced_persistent_volume_claim(namespace, body)
     except client.rest.ApiException as e:
-        print(f"PersistentVolumeClaim creation failed:\n{e}")
-        return
-    print(f"PersistentVolumeClaim {name} successfully created.")
+        if e.reason == "Conflict":
+            print(f"PersistentVolumeClaim {name} already exists")
+            resp = api.read_namespaced_persistent_volume_claim(name, namespace)
+        else:
+            print(f"PersistentVolumeClaim creation failed:\n{e}")
+            return
     return resp
 
 def delete_claim(name:str, namespace:str):

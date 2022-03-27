@@ -28,10 +28,15 @@ def create_nodeport(port:int, selector:str, namespace:str, protocol="TCP"):
     print(f"Creating NodePort {name} in namespace {namespace}.")
     try:
         resp = api.create_namespaced_service(namespace, body)
+        print(f"NodePort {name} successfully created.")
     except client.rest.ApiException as e:
-        print(f"NodePort creation failed:\n{e}")
-        return
-    print(f"NodePort {name} successfully created.")
+        if e.reason == "Conflict":
+            print(f"Nodeport for {name} already exists in namespace {namespace}")
+            resp = api.read_namespaced_service(name, namespace)
+        else:
+            print(f"NodePort creation failed:\n{e}")
+            return
+
     return resp
 
 def delete_nodeport(name:str, namespace:str):

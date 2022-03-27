@@ -39,9 +39,12 @@ def create_volume(name:str, namespace:str, size:str, storage_class=None):
     try:
         resp = api.create_persistent_volume(body)
     except client.rest.ApiException as e:
-        print(f"PersistentVolume creation failed:\n{e}")
-        return
-    print(f"PersistentVolume {name} successfully created.")
+        if e.reason == "Conflict":
+            print(f"PersistentVolume {name} already exists")
+            resp = api.read_persistent_volume(name)
+        else:
+            print(f"PersistentVolume creation failed:\n{e}")
+            return
     return resp
 
 def delete_volume(name:str):
