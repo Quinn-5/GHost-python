@@ -12,7 +12,7 @@ config.load_kube_config()
 @app.route('/', methods=['POST', 'GET'])      
 def root():
     if request.method == 'POST':
-        name=request.form['name']
+        # name=request.form['name']
         action=request.form['action']
         type=request.form['type']
 
@@ -28,14 +28,14 @@ def root():
         
         match action:
             case "create":
-                port = fn.deploy(name, "dev")
-                return redirect(url_for("created", port=port))
+                port = fn.deploy(type, "dev")
+                return render_template('created.html', port=port)
             case "delete":
-                fn.delete(name, "dev")
-                return render_template('deleted.html', name=name)
+                fn.delete(type, "dev")
+                return render_template('deleted.html', name=type)
 
     else:
-        name=request.args.get('name')
+        # name=request.args.get('name')
         action=request.args.get('action')
         type=request.args.get('type')
         
@@ -51,11 +51,11 @@ def root():
         
         match action:
             case "create":
-                port = fn.deploy(name, "dev")
+                port = fn.deploy(type, "dev")
                 return render_template('created.html', port=port)
             case "delete":
-                fn.delete(name, "dev")
-                return render_template('deleted.html', name=name)
+                fn.delete(type, "dev")
+                return render_template('deleted.html', name=type)
     
     return render_template('index.html')
 
