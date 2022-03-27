@@ -15,47 +15,28 @@ def root():
         # name=request.form['name']
         action=request.form['action']
         type=request.form['type']
-
-        match type:
-            case "factorio":
-                fn = deployments.factorio
-            case "minecraft":
-                fn = deployments.minecraft
-            case "terraria":
-                fn = deployments.terraria
-            case _:
-                return render_template('index.html')
-        
-        match action:
-            case "create":
-                port = fn.deploy(type, "dev")
-                return render_template('created.html', port=port)
-            case "delete":
-                fn.delete(type, "dev")
-                return render_template('deleted.html', name=type)
-
     else:
         # name=request.args.get('name')
         action=request.args.get('action')
         type=request.args.get('type')
-        
-        match type:
-            case "factorio":
-                import deployments.factorio as fn
-            case "minecraft":
-                import deployments.minecraft as fn
-            case "terraria":
-                import deployments.terraria as fn
-            case _:
-                return render_template('index.html')
-        
-        match action:
-            case "create":
-                port = fn.deploy(type, "dev")
-                return render_template('created.html', port=port)
-            case "delete":
-                fn.delete(type, "dev")
-                return render_template('deleted.html', name=type)
+
+    match type:
+        case "factorio":
+            fn = deployments.factorio
+        case "minecraft":
+            fn = deployments.minecraft
+        case "terraria":
+            fn = deployments.terraria
+        case _:
+            return render_template('index.html')
+    
+    match action:
+        case "create":
+            port = fn.deploy(type, "dev")
+            return render_template('created.html', port=port)
+        case "delete":
+            fn.delete(type, "dev")
+            return render_template('deleted.html', name=type)
     
     return render_template('index.html')
 
