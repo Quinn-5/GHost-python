@@ -1,6 +1,6 @@
 from kubernetes import client, config
 
-def create_nodeport(port:int, selector:str, namespace:str):
+def create_nodeport(port:int, selector:str, namespace:str, protocol="TCP"):
     """Creates a noteport 
 
     Parameters:
@@ -14,7 +14,7 @@ def create_nodeport(port:int, selector:str, namespace:str):
 
     spec = client.V1ServiceSpec(
         selector = {"app": selector},
-        ports = [client.V1ServicePort(port=port)],
+        ports = [client.V1ServicePort(port=port, protocol=protocol)],
         type="NodePort"
     )
 
