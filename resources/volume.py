@@ -54,7 +54,10 @@ def delete_volume(name:str):
     try:
         resp = api.delete_persistent_volume(name)
     except client.rest.ApiException as e:
-        print(f"PersistentVolume deletion failed:\n{e}")
+        if e.reason == "Not Found":
+            print(f"PersistentVolume {name} does not exist.")
+        else:
+            print(f"PersistentVolume deletion failed:\n{e}")
         return
     print(f"PersistentVolume {name} successfully deleted.")
     return resp

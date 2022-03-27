@@ -24,7 +24,10 @@ def delete_deployment(name:str, namespace:str):
     try:
         resp = api.delete_namespaced_deployment(name, namespace)
     except client.rest.ApiException as e:
-        print(f"Deployment deletion failed:\n{e}")
+        if e.reason == "Not Found":
+            print(f"Deployment {name} does not exist in namespace {namespace}")
+        else:
+            print(f"Deployment deletion failed:\n{e}")
         return
     print(f"Deployment {name} successfully deleted.")
     return resp

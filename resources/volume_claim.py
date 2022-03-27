@@ -36,7 +36,10 @@ def delete_claim(name:str, namespace:str):
     try:
         resp = api.delete_namespaced_persistent_volume_claim(name, namespace)
     except client.rest.ApiException as e:
-        print(f"PersistentVolumeClaim deletion failed:\n{e}")
+        if e.reason == "Not Found":
+            print(f"PersistentVolumeClaim {name} does not exist in namespace {namespace}")
+        else:
+            print(f"PersistentVolumeClaim deletion failed:\n{e}")
         return
     print(f"PersistentVolumeClaim {name} successfully deleted.")
     return resp
