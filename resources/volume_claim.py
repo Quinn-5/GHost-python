@@ -22,7 +22,11 @@ def create_claim(name:str, namespace:str, size:str, storage_class=None):
         resp = api.create_namespaced_persistent_volume_claim(namespace, body)
     except client.rest.ApiException as e:
         if e.reason == "Conflict":
+<<<<<<< HEAD
             print(f"PersistentVolumeClaim {name} already exists")
+=======
+            print(f"PersistentVolumeClaim {name} already exists in namespace {namespace}")
+>>>>>>> 7467b6b (now properly handles creation of resources that already exist)
             resp = api.read_namespaced_persistent_volume_claim(name, namespace)
         else:
             print(f"PersistentVolumeClaim creation failed:\n{e}")
