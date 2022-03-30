@@ -1,13 +1,14 @@
 from crypt import methods
-from distutils.command.config import config
+import imp
 from flask import Flask, redirect, render_template, request, url_for
-from kubernetes import config
+from kubernetes import config, client
 import deployments
 
 from resources import deployment
 
 app = Flask(__name__)
 config.load_kube_config()
+host = client.Configuration.get_default_copy().host.strip("https://").split(":")[0]
 
 @app.route('/', methods=['POST', 'GET'])      
 def root():
@@ -33,7 +34,7 @@ def root():
     match action:
         case "create":
             port = fn.deploy(type, "dev")
-            return render_template('created.html', port=port)
+            return render_template('created.html', host=host, port=port)
         case "delete":
             fn.delete(type, "dev")
             return render_template('deleted.html', name=type)
@@ -43,7 +44,7 @@ def root():
 @app.route('/created')
 def created():
     port=request.form['port']
-    return render_template('created.html', port=port)
+    return render_template('created.html',host=host, port=port)
 
 @app.route('/deleted')
 def deleted():
