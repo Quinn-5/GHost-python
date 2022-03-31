@@ -1,6 +1,14 @@
 from kubernetes import client, config
 
 def create_volume(name:str, namespace:str, size:str, storage_class=None):
+    """
+    Creates a loca PersistentVolume and applies it to the cluster
+
+    Parameters:
+        name(str): Name of PersistentVolume
+        namespace(str): namespace of the rest of the deployment
+        size(str): Size of the volume in MiB
+    """
     api = client.CoreV1Api()
 
     spec = client.V1PersistentVolumeSpec(
@@ -48,6 +56,12 @@ def create_volume(name:str, namespace:str, size:str, storage_class=None):
     return resp
 
 def delete_volume(name:str):
+    """
+    Deletes a namespaced PersistentVolume from the cluster
+
+    Parameters:
+        name(str): Name of the existing PersistentVolume
+    """
     api = client.CoreV1Api()
 
     print(f"Deleting PersistentVolume {name}.")

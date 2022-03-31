@@ -1,6 +1,14 @@
 from kubernetes import client, config
 
 def create_claim(name:str, namespace:str, size:str, storage_class=None):
+    """
+    Creates a PersistentVolumeClaim and applies it to the cluster
+
+    Parameters:
+        name(str): Name of PerisitentVolumeClaim. Must be the same as the PersistentVolume it attaches to
+        namespace(str): Namespace for the PersistentVolumeClaim to be applied to
+        size(str): Size of the claim in MiB
+    """
     api = client.CoreV1Api()
 
     spec = client.V1PersistentVolumeClaimSpec(
@@ -30,6 +38,13 @@ def create_claim(name:str, namespace:str, size:str, storage_class=None):
     return resp
 
 def delete_claim(name:str, namespace:str):
+    """
+    Deletes a namespaced PersistentVolumeClaim from the cluster
+
+    Parameters:
+        name(str): Name of the existing PersistentVolumeClaim
+        namespace(str): Namespace that the PersistentVolumeClaim exists on
+    """
     api = client.CoreV1Api()
 
     print(f"Deleting PersistentVolumeClaim {name} from namespace {namespace}.")

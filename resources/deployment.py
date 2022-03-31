@@ -1,13 +1,20 @@
 from kubernetes import client, config
 
 def launch_deployment(deployment:client.V1Deployment, namespace:str):
+    """
+    Applies a provided Deployment to the cluster
+
+    Parameters:
+        deployment(V1Deployment): Deployment object to apply
+        namespace(str): Namespace for the Deployment to be applied to
+    """
     api = client.AppsV1Api()
 
     name = deployment.metadata.name
-    print(f"Creating Deployment {deployment.metadata.name} in namespace {namespace}")
+    print(f"Creating Deployment {name} in namespace {namespace}")
     try:
         resp = api.create_namespaced_deployment(namespace, deployment)
-        print(f"Deployment {deployment.metadata.name} successfully created.")
+        print(f"Deployment {name} successfully created.")
     except client.rest.ApiException as e:
         if e.reason == "Conflict":
             print(f"Deployment {name} already exists in namespace {namespace}")
@@ -18,6 +25,13 @@ def launch_deployment(deployment:client.V1Deployment, namespace:str):
     return resp
 
 def delete_deployment(name:str, namespace:str):
+    """
+    Deletes a namespaced Deployment from the cluster
+
+    Parameters:
+        name(str): Name of the existing Deployment
+        namespace(str): Namespace that the Deployment exists on
+    """
     api = client.AppsV1Api()
 
     print(f"Deleting Deployment {name} from namespace {namespace}.")

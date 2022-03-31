@@ -6,6 +6,9 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import resources
 
 def create_deployment(name:str):
+    """
+    Return a deployment object for a Terraria server based on configuration input.
+    """
     api = client.CoreV1Api()
 
     spec = client.V1DeploymentSpec(
@@ -51,11 +54,14 @@ def create_deployment(name:str):
     return deployment
 
 def deploy(name:str, namespace:str):
+    """
+    Deploys a Terraria server given a name and namespace
+    """
     api = client.CoreV1Api()
     deployment = create_deployment(name)
     resources.create_volume(name, namespace, "500Mi")
     resources.create_claim(name, namespace, "500Mi")
-    np = resources.create_nodeport(7777, name, namespace)
+    np = resources.create_nodeport(name, namespace, 7777)
     resources.launch_deployment(deployment, namespace)
     try:
         port = np.spec.ports[0].node_port
@@ -66,6 +72,9 @@ def deploy(name:str, namespace:str):
 
 
 def delete(name:str, namespace:str):
+    """
+    Deletes a Terraria server with given name from a given namespace
+    """
     resources.delete_deployment(name, namespace)
     resources.delete_nodeport(name, namespace)
     resources.delete_claim(name, namespace)

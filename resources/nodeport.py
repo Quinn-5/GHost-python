@@ -1,19 +1,20 @@
 from kubernetes import client, config
 
-def create_nodeport(port:int, selector:str, namespace:str, protocol="TCP"):
-    """Creates a noteport 
+def create_nodeport(name:str, namespace:str, port:int, protocol="TCP"):
+    """
+    Creates a NodePort service and applies it to the cluster
 
     Parameters:
-    port (int): port of the internal service
-    selector (str): service to attach to
-    namespace: 
-
+        name(str): Name of nodeport. Must be the same as the deployment it exposes
+        namespace(str): Namespace for the NodePort to be applied to
+        port(int): Internal port that you would like to expose. External ports for access are randomized
+        protocol(int): Which transport layer protocol to forward
     """
     api = client.CoreV1Api()
-    name = selector
+    name
 
     spec = client.V1ServiceSpec(
-        selector = {"app": selector},
+        selector = {"app": name},
         ports = [client.V1ServicePort(port=port, protocol=protocol)],
         type="NodePort"
     )
@@ -40,6 +41,13 @@ def create_nodeport(port:int, selector:str, namespace:str, protocol="TCP"):
     return resp
 
 def delete_nodeport(name:str, namespace:str):
+    """
+    Deletes a namespaced NodePort service from the cluster
+
+    Parameters:
+        name(str): Name of the existing NodePort
+        namespace(str): Namespace that the NodePort exists on
+    """
     api = client.CoreV1Api()
     
     print(f"Deleting NodePort {name} from namespace {namespace}.")
