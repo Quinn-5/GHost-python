@@ -1,6 +1,6 @@
 from kubernetes import client, config
 
-def create_volume(name:str, namespace:str, size:str, storage_class=None):
+def create_volume(name:str, size:str, storage_class=None):
     """
     Creates a loca PersistentVolume and applies it to the cluster
 
@@ -16,7 +16,7 @@ def create_volume(name:str, namespace:str, size:str, storage_class=None):
         capacity={"storage":size},
         persistent_volume_reclaim_policy="Delete",
         local=client.V1LocalVolumeSource(
-            path=f"/mnt/kube/{namespace}/{name}"
+            path=f"/mnt/kube/{name}"
         ),
         node_affinity=client.V1VolumeNodeAffinity(
             required=client.V1NodeSelector(
@@ -79,9 +79,9 @@ def delete_volume(name:str):
 def main():
     config.load_kube_config()
 
-    create_volume("test", "dev", "500Mi")
+    create_volume("dev-test", "500Mi")
     input("Press Enter to continue...")
-    delete_volume("test")
+    delete_volume("dev-test")
 
 if __name__ == "__main__":
     main()

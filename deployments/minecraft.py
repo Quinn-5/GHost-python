@@ -70,16 +70,19 @@ def create_deployment(name:str):
 
     return deployment
 
-def deploy(name:str, namespace:str):
+def deploy(name:str, user:str):
     """
     Deploys a Minecraft server given a name and namespace
     """
+
+    fullname = f"{user}-{name}"
+
     api = client.CoreV1Api()
-    deployment = create_deployment(name)
-    resources.create_volume(name, namespace, "500Mi")
-    resources.create_claim(name, namespace, "500Mi")
-    np = resources.create_nodeport(name, namespace, 25565)
-    resources.launch_deployment(deployment, namespace)
+    deployment = create_deployment(fullname)
+    resources.create_volume(fullname, "500Mi")
+    resources.create_claim(fullname, "500Mi")
+    np = resources.create_nodeport(fullname, 25565)
+    resources.launch_deployment(deployment)
     try:
         port = np.spec.ports[0].node_port
         print(f"Server created. accessible at amadeus.csh.rit.edu:{port}")
@@ -88,14 +91,17 @@ def deploy(name:str, namespace:str):
         pass
 
 
-def delete(name:str, namespace:str):
+def delete(name:str, user:str):
     """
     Deletes a Minecraft server with given name from a given namespace
     """
-    resources.delete_deployment(name, namespace)
-    resources.delete_nodeport(name, namespace)
-    resources.delete_claim(name, namespace)
-    resources.delete_volume(name)
+
+    fullname = f"{user}-{name}"
+
+    resources.delete_deployment(fullname, namespace)
+    resources.delete_nodeport(fullname, namespace)
+    resources.delete_claim(fullname, namespace)
+    resources.delete_volume(fullname)
 
 def main():
     config.load_kube_config()

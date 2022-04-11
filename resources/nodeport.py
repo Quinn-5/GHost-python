@@ -1,6 +1,6 @@
 from kubernetes import client, config
 
-def create_nodeport(name:str, namespace:str, port:int, protocol="TCP"):
+def create_nodeport(name:str, port:int, protocol="TCP", namespace="default"):
     """
     Creates a NodePort service and applies it to the cluster
 
@@ -40,7 +40,7 @@ def create_nodeport(name:str, namespace:str, port:int, protocol="TCP"):
 
     return resp
 
-def delete_nodeport(name:str, namespace:str):
+def delete_nodeport(name:str, namespace="default"):
     """
     Deletes a namespaced NodePort service from the cluster
 
@@ -66,9 +66,9 @@ def delete_nodeport(name:str, namespace:str):
 def main():
     config.load_kube_config()
 
-    create_nodeport(25565, "test", "dev")
+    create_nodeport("dev-test", 25565)
     input("Press Enter to continue...")
-    delete_nodeport("test", "dev")
+    delete_nodeport("dev-test")
 
 if __name__ == "__main__":
     main()

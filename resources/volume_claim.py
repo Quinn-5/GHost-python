@@ -1,6 +1,6 @@
 from kubernetes import client, config
 
-def create_claim(name:str, namespace:str, size:str, storage_class=None):
+def create_claim(name:str, size:str, storage_class=None, namespace="default"):
     """
     Creates a PersistentVolumeClaim and applies it to the cluster
 
@@ -37,7 +37,7 @@ def create_claim(name:str, namespace:str, size:str, storage_class=None):
             return
     return resp
 
-def delete_claim(name:str, namespace:str):
+def delete_claim(name:str, namespace="default"):
     """
     Deletes a namespaced PersistentVolumeClaim from the cluster
 
@@ -62,9 +62,9 @@ def delete_claim(name:str, namespace:str):
 def main():
     config.load_kube_config()
 
-    create_claim("test", "dev", "500Mi")
+    create_claim("dev-test", "500Mi")
     input("Press Enter to continue...")
-    delete_claim("test", "dev")
+    delete_claim("dev-test")
 
 if __name__ == "__main__":
     main()

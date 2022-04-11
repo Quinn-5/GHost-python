@@ -1,6 +1,6 @@
 from kubernetes import client, config
 
-def launch_deployment(deployment:client.V1Deployment, namespace:str):
+def launch_deployment(deployment:client.V1Deployment, namespace="default"):
     """
     Applies a provided Deployment to the cluster
 
@@ -24,7 +24,7 @@ def launch_deployment(deployment:client.V1Deployment, namespace:str):
             return
     return resp
 
-def delete_deployment(name:str, namespace:str):
+def delete_deployment(name:str, namespace="default"):
     """
     Deletes a namespaced Deployment from the cluster
 
