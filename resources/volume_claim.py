@@ -14,8 +14,8 @@ def create_claim(name:str, size:str, storage_class=None, namespace="default"):
     spec = client.V1PersistentVolumeClaimSpec(
         access_modes=["ReadWriteOnce"],
         resources=client.V1ResourceRequirements(requests={"storage":size}),
-        storage_class_name=storage_class,
-        volume_name=name
+        storage_class_name="csi-rbd-sc",
+        volume_mode="Filesystem"
     )
 
     body = client.V1PersistentVolumeClaim(

@@ -1,5 +1,3 @@
-from crypt import methods
-import imp
 from flask import Flask, redirect, render_template, request, url_for
 from kubernetes import config, client
 import deployments
@@ -13,11 +11,11 @@ host = client.Configuration.get_default_copy().host.strip("https://").split(":")
 @app.route('/', methods=['POST', 'GET'])      
 def root():
     if request.method == 'POST':
-        # name=request.form['name']
+        name=request.form['name']
         action=request.form['action']
         type=request.form['type']
     else:
-        # name=request.args.get('name')
+        name=request.args.get('name')
         action=request.args.get('action')
         type=request.args.get('type')
 
@@ -33,11 +31,11 @@ def root():
     
     match action:
         case "create":
-            port = fn.deploy(type, "dev")
+            port = fn.deploy(name, "dev")
             return render_template('created.html', host=host, port=port)
         case "delete":
-            fn.delete(type, "dev")
-            return render_template('deleted.html', name=type)
+            fn.delete(name, "dev")
+            return render_template('deleted.html', name=name)
     
     return render_template('index.html')
 
