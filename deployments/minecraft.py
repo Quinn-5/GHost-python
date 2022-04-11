@@ -98,9 +98,9 @@ def delete(name:str, user:str):
 
     fullname = f"{user}-{name}"
 
-    resources.delete_deployment(fullname, namespace)
-    resources.delete_nodeport(fullname, namespace)
-    resources.delete_claim(fullname, namespace)
+    resources.delete_deployment(fullname)
+    resources.delete_nodeport(fullname)
+    resources.delete_claim(fullname)
     resources.delete_volume(fullname)
 
 def main():
