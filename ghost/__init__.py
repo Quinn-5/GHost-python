@@ -26,6 +26,8 @@ def root():
             fn = deployments.minecraft
         case "terraria":
             fn = deployments.terraria
+        case "tf2":
+            fn = deployments.tf2
         case _:
             return render_template('index.html')
     
