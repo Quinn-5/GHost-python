@@ -68,7 +68,7 @@ def edit_nodeport(name:str, port:int, protocol="TCP", namespace="default"):
 
     spec = client.V1ServiceSpec(
         selector = {"app": name},
-        ports = [client.V1ServicePort(node_gitport=port, port=port, protocol=protocol)],
+        ports = [client.V1ServicePort(node_port=port, port=port, protocol=protocol)],
         type="NodePort"
     )
 
