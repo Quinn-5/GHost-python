@@ -7,7 +7,7 @@ import resources
 
 def create_deployment(name:str, port):
     """
-    Return a deployment object for a Team Fortress 2 server based on configuration input.
+    Return a deployment object for a CS:GO server based on configuration input.
     """
     api = client.CoreV1Api()
 
@@ -35,26 +35,26 @@ def create_deployment(name:str, port):
                             value=name
                         )
                     ],
-                    image="cm2network/tf2",
+                    image="cm2network/csgo",
                     image_pull_policy="Always",
                     stdin=True,
                     tty=True,
                     volume_mounts=[client.V1VolumeMount(
-                        mount_path="~/tf-dedicated",
-                        name=name
+                       mount_path="~/csgo-dedicated",
+                       name=name
                     )]
                 )],
                 restart_policy="Always",
                 volumes=[client.V1Volume(
-                    name=name,
-                    persistent_volume_claim=client.V1PersistentVolumeClaimVolumeSource(
-                        claim_name=name
-                    )
+                   name=name,
+                   persistent_volume_claim=client.V1PersistentVolumeClaimVolumeSource(
+                       claim_name=name
+                   )
                 )],
                 security_context=client.V1SecurityContext(
-                    allow_privilege_escalation=False,
-                    run_as_group=1000,
-                    run_as_user=1000
+                  allow_privilege_escalation=False,
+                   run_as_group=1000,
+                   run_as_user=1000
                 )
             )
         )
@@ -73,7 +73,7 @@ def create_deployment(name:str, port):
 
 def deploy(name:str, user:str):
     """
-    Deploys a Team Fortress 2 server given a name and namespace
+    Deploys a CS:GO server given a name and namespace
     """
 
     fullname = f"{user}-{name}"
@@ -86,7 +86,7 @@ def deploy(name:str, user:str):
         deployment = create_deployment(fullname, port)
     except AttributeError:
         pass
-    resources.create_claim(fullname, "6Gi")
+    resources.create_claim(fullname, "25Gi")
     resources.launch_deployment(deployment)
     if "port" in locals():
         print(f"Server created. accessible at amadeus.csh.rit.edu:{port}")
@@ -95,7 +95,7 @@ def deploy(name:str, user:str):
 
 def delete(name:str, user:str):
     """
-    Deletes a Team Fortress 2 server with given name from a given namespace
+    Deletes a CS:GO server with given name from a given namespace
     """
 
     fullname = f"{user}-{name}"
@@ -108,7 +108,7 @@ def delete(name:str, user:str):
 def main():
     config.load_kube_config()
 
-    name = "tf2"
+    name = "csgo"
     namespace = "dev"
 
     deploy(name, namespace)

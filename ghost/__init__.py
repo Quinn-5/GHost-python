@@ -20,6 +20,8 @@ def root():
         type=request.args.get('type')
 
     match type:
+        case "csgo":
+            fn = deployments.csgo
         case "factorio":
             fn = deployments.factorio
         case "minecraft":
