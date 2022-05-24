@@ -13,7 +13,9 @@ Obviously, the web UI is also very lackluster, however it currently only exists 
 
 ## TODO:
   - [X] Translate YAML files to Kubernetes API calls
-  - [ ] Add support for Storage Classes and dynamic storage allocation
+  - [X] Add support for Storage Classes and dynamic storage allocation
   - [ ] Add support user accounts, resource limuts, etc.
   - [ ] Allow for management of files and pods after creation
   - [ ] Flesh out frontend, make it look nicer
+
+This project is currently on hold, and being entirely rewritten in go. Progress on the rewrite is occurring at https://github.com/Quinn-5/learning-go. When it is at or beyond the functionality this version of the project is at, I will migrate all code from that repo to this one. 
